@@ -1,25 +1,60 @@
+using DotNetEnv;
+using To_Do.Extensions;
+
+Env.Load();
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure Extensions
+builder.Services.AddCorsConfiguration();
+builder.Services.AddDatabaseConfiguration();
+builder.Services.AddJwtConfiguration(builder.Configuration);
+builder.Services.AddSwaggerConfiguration();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddRepositories();
+builder.Services.AddServices();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// Middleware for development
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+// Middleware de Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Hotel_Riwi API V1");
+});
 
+// Middleware for redirecting to swagger
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path == "/")
+    {
+        context.Response.Redirect("/swagger");
+        return;
+    }
+    await next();
+});
+
+// Middleware CORS
+app.UseCors("AllowSpecificOrigin");
+
+// hability to serve static files
+app.UseStaticFiles();
+
+// authentication and authorization
+app.UseAuthentication();
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
 
 app.Run();
