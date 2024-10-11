@@ -13,7 +13,7 @@ namespace To_Do.Extensions
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Hotel-Riwi API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "To-Do API", Version = "v1" });
 
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {

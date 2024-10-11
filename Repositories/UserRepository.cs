@@ -33,11 +33,10 @@ namespace To_Do.Repositories
             return await _context.Users.FirstOrDefaultAsync(x => x.Username == username);
         }
 
-        public async Task<User> AddUserAsync(User user)
+        public async Task AddUserAsync(User user)
         {
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
-            return user;
         }
 
         public async Task<User> UpdateUserAsync(User user)

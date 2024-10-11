@@ -25,6 +25,6 @@ namespace To_Do.Models.DTOs
         [MaxLength(100, ErrorMessage = "The password must be less than 100 characters")]
         [MinLength(8, ErrorMessage = "The password must be more than 8 characters")]
         [Display(Name = "Password")]
-        public string PasswordHash { get; set; }
+        public string Password { get; set; }
     }
 }
